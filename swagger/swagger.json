@@ -1,0 +1,349 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "beego Test API",
+        "description": "beego has a very cool tools to autogenerate documents for your API",
+        "version": "1.0.0",
+        "termsOfService": "http://beego.me/",
+        "contact": {
+            "email": "astaxie@gmail.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        }
+    },
+    "basePath": "/api",
+    "paths": {
+        "/search/": {
+            "get": {
+                "tags": [
+                    "search"
+                ],
+                "description": "search Statistics",
+                "operationId": "SearchController.Get",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "query",
+                        "description": "Filter. e.g. col1:v1,col2:v2 ...",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "sortby",
+                        "description": "Sorted-by fields. e.g. col1,col2 ...",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "order",
+                        "description": "Order corresponding to each sortby field, if single value, apply to all sortby fields. e.g. desc,asc ...",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "limit",
+                        "description": "Limit the size of result set. Must be an integer",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "offset",
+                        "description": "Start position of result set. Must be an integer",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "begin",
+                        "description": "Start position of time. Must be an integer.TimeStamp!!",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "end",
+                        "description": "End position of time. Must be an integer.TimeStamp!!",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "schema": {
+                            "$ref": "#/definitions/models.Statistics"
+                        }
+                    },
+                    "403": {}
+                }
+            },
+            "post": {
+                "tags": [
+                    "search"
+                ],
+                "description": "Pagination for Datatables",
+                "operationId": "SearchController.Post",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "body for aoData: ipc=1\u0026begin=1486051200\u0026end=1486656000\u0026sEcho=6\u0026iColumns=4\u0026sColumns=%2C%2C%2C\u0026iDisplayStart=0\u0026iDisplayLength=10\u0026mDataProp_0=\u0026sSearch_0=\u0026bRegex_0=false\u0026bSearchable_0=false\u0026mDataProp_1=1\u0026sSearch_1=\u0026bRegex_1=false\u0026bSearchable_1=true\u0026mDataProp_2=2\u0026sSearch_2=\u0026bRegex_2=false\u0026bSearchable_2=true\u0026mDataProp_3=3\u0026sSearch_3=\u0026bRegex_3=false\u0026bSearchable_3=true\u0026sSearch=\u0026bRegex=false",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/.AoData"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "{int} models.Statistics"
+                    },
+                    "403": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
+        "/statistics/": {
+            "get": {
+                "tags": [
+                    "statistics"
+                ],
+                "description": "get Statistics",
+                "operationId": "StatisticsController.Get All",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "query",
+                        "description": "Filter. e.g. col1:v1,col2:v2 ...",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "fields",
+                        "description": "Fields returned. e.g. col1,col2 ...",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "sortby",
+                        "description": "Sorted-by fields. e.g. col1,col2 ...",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "order",
+                        "description": "Order corresponding to each sortby field, if single value, apply to all sortby fields. e.g. desc,asc ...",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "limit",
+                        "description": "Limit the size of result set. Must be an integer",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "offset",
+                        "description": "Start position of result set. Must be an integer",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "begin",
+                        "description": "Start position of time. Must be an integer.TimeStamp!!",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "end",
+                        "description": "End position of time. Must be an integer.TimeStamp!!",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "schema": {
+                            "$ref": "#/definitions/models.Statistics"
+                        }
+                    },
+                    "403": {}
+                }
+            },
+            "post": {
+                "tags": [
+                    "statistics"
+                ],
+                "description": "create Statistics",
+                "operationId": "StatisticsController.Post",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "body for Statistics content",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Statistics"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "{int} models.Statistics"
+                    },
+                    "403": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
+        "/statistics/ipcs": {
+            "get": {
+                "tags": [
+                    "statistics"
+                ],
+                "description": "get IpcAll",
+                "operationId": "StatisticsController.Get IpcAll 获取摄像头",
+                "responses": {
+                    "200": {
+                        "schema": {
+                            "$ref": "#/definitions/models.Statistics"
+                        }
+                    },
+                    "403": {
+                        "description": ":id is empty"
+                    }
+                }
+            }
+        },
+        "/statistics/{id}": {
+            "get": {
+                "tags": [
+                    "statistics"
+                ],
+                "description": "get Statistics by id",
+                "operationId": "StatisticsController.Get One",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "The key for staticblock",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "schema": {
+                            "$ref": "#/definitions/models.Statistics"
+                        }
+                    },
+                    "403": {
+                        "description": ":id is empty"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "statistics"
+                ],
+                "description": "update the Statistics",
+                "operationId": "StatisticsController.Put",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "The id you want to update",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "body for Statistics content",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Statistics"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "schema": {
+                            "$ref": "#/definitions/models.Statistics"
+                        }
+                    },
+                    "403": {
+                        "description": ":id is not int"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "statistics"
+                ],
+                "description": "delete the Statistics",
+                "operationId": "StatisticsController.Delete",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "The id you want to delete",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{string} delete success!"
+                    },
+                    "403": {
+                        "description": "id is empty"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        ".AoData": {
+            "type": "object"
+        },
+        ".Time": {
+            "type": "object"
+        },
+        "models.Statistics": {
+            "title": "Statistics",
+            "type": "object",
+            "properties": {
+                "age": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "created": {
+                    "$ref": "#/definitions/time.Time"
+                },
+                "id": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "ipc": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "sex": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "statistics",
+            "description": "StatisticsController operations for Statistics\n"
+        },
+        {
+            "name": "search",
+            "description": "SearchController operations for searching  Statistics\n"
+        }
+    ]
+}

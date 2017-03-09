@@ -8,24 +8,21 @@
 package routers
 
 import (
-	"statistics/controllers"
+	"faceStatis/controllers"
 
 	"github.com/astaxie/beego"
 )
 
 func init() {
-	//beego.Router("/testAjax", &controllers.SearchController{}, "*:TestAjax")
 	ns := beego.NewNamespace("/api",
-
-		beego.NSNamespace("/statistics",
-
+		beego.NSNamespace("/chart",
 			beego.NSInclude(
-				&controllers.StatisticsController{},
+				&controllers.ChartsController{},
 			),
 		),
-		beego.NSNamespace("/search",
+		beego.NSNamespace("/statistics",
 			beego.NSInclude(
-				&controllers.SearchController{},
+				&controllers.StatisticsController{},
 			),
 		),
 	)

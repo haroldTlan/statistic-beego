@@ -10,7 +10,7 @@ import (
 
 func init() {
 	orm.RegisterDataBase("default", "mysql", "root:passwd@tcp(127.0.0.1:3306)/FaceTest?charset=utf8&loc=Local")
-	logs.SetLogger(logs.AdapterFile, `{"filename":"Statistics.log"}`)
+	logs.SetLogger(logs.AdapterFile, `{"filename":"statistics.log","daily":false,"maxdays":365,"level":3}`)
 	logs.EnableFuncCallDepth(true)
 	logs.Async()
 }

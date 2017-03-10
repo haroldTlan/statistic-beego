@@ -74,19 +74,25 @@ func Charts(start, end int) Chart {
 	chart.Num = make([]int, 8)
 	chart.NumMale = make([]int, 8)
 	chart.NumFemale = make([]int, 8)
-	chart.NumXyMale = make([][]int64, 500)
-	chart.NumXyFemale = make([][]int64, 500)
+	chart.NumXyMale = make([][]int64, 0, 1)
+
+	chart.NumXyFemale = make([][]int64, 0, 1)
 
 	o := orm.NewOrm()
 	starts := time.Unix(int64(start), 0)
 	ends := time.Unix(int64(end), 0)
 	img := make([]Image, 0)
 	qs := o.QueryTable(new(Image)).Filter("timestamp__gte", starts.Format("2006-01-02 03:04:05")).Filter("timestamp__lte", ends.Format("2006-01-02 03:04:05"))
-	qs.Limit(100000).All(&img)
+	if _, err := qs.Limit(100000).All(&img); err != nil {
+		AddLog(err)
+	}
 
 	for _, val := range img {
 		var d DetectedFace
-		o.QueryTable(new(DetectedFace)).Filter("idimage", val.Id).One(&d)
+		if err := o.QueryTable(new(DetectedFace)).Filter("idimage", val.Id).One(&d); err != nil {
+			AddLog(err)
+		}
+
 		_Charts(val.Timestamp, d, &chart, &chartT)
 	}
 	for k, v := range chartT.NumAge {
@@ -139,93 +145,94 @@ func _Chartss(t time.Time, d DetectedFace, c *Chart, ct *ChartT) {
 	case (age <= 99 && age > 89):
 		ct.NumAge["90-99"] += 1
 	default:
+		ct.NumAge["99以上"] += 1
 	}
 	switch {
 	case (inTimeSpan(t0, t3, in) && d.Gender == "male"):
 		ct.NumTime[0] += 1
-		c.NumXyMale = append(c.NumXyMale, []int64{t.Unix(), int64(age)})
+		c.NumXyMale = append(c.NumXyMale, []int64{t.Unix() * 1000, int64(age)})
 		c.TotalMale += 1
 		ct.NumTimeMale[0] += 1
 	case (inTimeSpan(t0, t3, in) && d.Gender == "female"):
 		ct.NumTime[0] += 1
-		c.NumXyFemale = append(c.NumXyFemale, []int64{t.Unix(), int64(age)})
+		c.NumXyFemale = append(c.NumXyFemale, []int64{t.Unix() * 1000, int64(age)})
 		ct.NumTimeFemale[0] += 1
 		c.TotalFemale += 1
 
 	case (inTimeSpan(t3, t6, in) && d.Gender == "male"):
 		ct.NumTime[1] += 1
-		c.NumXyMale = append(c.NumXyMale, []int64{t.Unix(), int64(age)})
+		c.NumXyMale = append(c.NumXyMale, []int64{t.Unix() * 1000, int64(age)})
 		c.TotalMale += 1
 		ct.NumTimeMale[1] += 1
 	case (inTimeSpan(t3, t6, in) && d.Gender == "female"):
 		ct.NumTime[1] += 1
-		c.NumXyFemale = append(c.NumXyFemale, []int64{t.Unix(), int64(age)})
+		c.NumXyFemale = append(c.NumXyFemale, []int64{t.Unix() * 1000, int64(age)})
 		ct.NumTimeFemale[1] += 1
 		c.TotalFemale += 1
 
 	case (inTimeSpan(t6, t9, in) && d.Gender == "female"):
 		ct.NumTime[2] += 1
-		c.NumXyMale = append(c.NumXyMale, []int64{t.Unix(), int64(age)})
+		c.NumXyMale = append(c.NumXyMale, []int64{t.Unix() * 1000, int64(age)})
 		c.TotalMale += 1
 		ct.NumTimeMale[2] += 1
 	case (inTimeSpan(t6, t9, in) && d.Gender == "male"):
 		ct.NumTime[2] += 1
-		c.NumXyFemale = append(c.NumXyFemale, []int64{t.Unix(), int64(age)})
+		c.NumXyFemale = append(c.NumXyFemale, []int64{t.Unix() * 1000, int64(age)})
 		ct.NumTimeFemale[2] += 1
 		c.TotalFemale += 1
 
 	case (inTimeSpan(t9, t12, in) && d.Gender == "male"):
 		ct.NumTime[3] += 1
-		c.NumXyMale = append(c.NumXyMale, []int64{t.Unix(), int64(age)})
+		c.NumXyMale = append(c.NumXyMale, []int64{t.Unix() * 1000, int64(age)})
 		c.TotalMale += 1
 		ct.NumTimeMale[3] += 1
 	case (inTimeSpan(t9, t12, in) && d.Gender == "female"):
 		ct.NumTime[3] += 1
-		c.NumXyFemale = append(c.NumXyFemale, []int64{t.Unix(), int64(age)})
+		c.NumXyFemale = append(c.NumXyFemale, []int64{t.Unix() * 1000, int64(age)})
 		ct.NumTimeFemale[3] += 1
 		c.TotalFemale += 1
 
 	case (inTimeSpan(t12, t15, in) && d.Gender == "male"):
 		ct.NumTime[4] += 1
-		c.NumXyMale = append(c.NumXyMale, []int64{t.Unix(), int64(age)})
+		c.NumXyMale = append(c.NumXyMale, []int64{t.Unix() * 1000, int64(age)})
 		c.TotalMale += 1
 		ct.NumTimeMale[4] += 1
 	case (inTimeSpan(t12, t15, in) && d.Gender == "female"):
 		ct.NumTime[4] += 1
-		c.NumXyFemale = append(c.NumXyFemale, []int64{t.Unix(), int64(age)})
+		c.NumXyFemale = append(c.NumXyFemale, []int64{t.Unix() * 1000, int64(age)})
 		ct.NumTimeFemale[4] += 1
 		c.TotalFemale += 1
 
 	case (inTimeSpan(t15, t18, in) && d.Gender == "male"):
 		ct.NumTime[5] += 1
-		c.NumXyMale = append(c.NumXyMale, []int64{t.Unix(), int64(age)})
+		c.NumXyMale = append(c.NumXyMale, []int64{t.Unix() * 1000, int64(age)})
 		c.TotalMale += 1
 		ct.NumTimeMale[5] += 1
 	case (inTimeSpan(t15, t18, in) && d.Gender == "female"):
 		ct.NumTime[5] += 1
-		c.NumXyFemale = append(c.NumXyFemale, []int64{t.Unix(), int64(age)})
+		c.NumXyFemale = append(c.NumXyFemale, []int64{t.Unix() * 1000, int64(age)})
 		ct.NumTimeFemale[5] += 1
 		c.TotalFemale += 1
 
 	case (inTimeSpan(t18, t21, in) && d.Gender == "male"):
 		ct.NumTime[6] += 1
-		c.NumXyMale = append(c.NumXyMale, []int64{t.Unix(), int64(age)})
+		c.NumXyMale = append(c.NumXyMale, []int64{t.Unix() * 1000, int64(age)})
 		c.TotalMale += 1
 		ct.NumTimeMale[6] += 1
 	case (inTimeSpan(t18, t21, in) && d.Gender == "female"):
 		ct.NumTime[6] += 1
-		c.NumXyFemale = append(c.NumXyFemale, []int64{t.Unix(), int64(age)})
+		c.NumXyFemale = append(c.NumXyFemale, []int64{t.Unix() * 1000, int64(age)})
 		ct.NumTimeFemale[6] += 1
 		c.TotalFemale += 1
 
 	case (inTimeSpan(t21, t24, in) && d.Gender == "male"):
 		ct.NumTime[7] += 1
-		c.NumXyMale = append(c.NumXyMale, []int64{t.Unix(), int64(age)})
+		c.NumXyMale = append(c.NumXyMale, []int64{t.Unix() * 1000, int64(age)})
 		c.TotalMale += 1
 		ct.NumTimeMale[7] += 1
 	case (inTimeSpan(t21, t24, in) && d.Gender == "female"):
 		ct.NumTime[7] += 1
-		c.NumXyFemale = append(c.NumXyFemale, []int64{t.Unix(), int64(age)})
+		c.NumXyFemale = append(c.NumXyFemale, []int64{t.Unix() * 1000, int64(age)})
 		ct.NumTimeFemale[7] += 1
 		c.TotalFemale += 1
 	default:
@@ -366,5 +373,5 @@ func _Charts(t time.Time, d DetectedFace, c *Chart, ct *ChartT) {
 }
 
 func inTimeSpan(start, end, check time.Time) bool {
-	return check.After(start) && check.Before(end)
+	return check.After(start) && check.Before(end) || start == check || end == check
 }

@@ -2,10 +2,8 @@ package controllers
 
 import (
 	"faceStatis/models"
-	_ "fmt"
 	"github.com/astaxie/beego"
 	"strconv"
-	//"time"
 )
 
 // Operations about Statistics
@@ -28,6 +26,7 @@ func (c *StatisticsController) Post() {
 		"Created",
 	}
 
+	//Get Data between start and end
 	maps, count, counts := models.Datatables(aColumns, c.Ctx.Input)
 
 	data := make(map[string]interface{}, count)
